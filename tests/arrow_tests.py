@@ -1778,6 +1778,132 @@ class ArrowHumanizeTestsWithLocale(Chai):
         self.assertEqual(result, "2 года назад")
 
 
+class ArrowReverseHumanizeTests(Chai):
+    def test_now(self):
+
+        test_str = "just now"
+        now = arrow.Arrow.reverse_humanize(test_str)
+        self.assertEqual(now.humanize(), test_str)
+
+    def test_seconds(self):
+
+        test_str = "in seconds"
+        later = arrow.Arrow.reverse_humanize(test_str)
+        self.assertEqual(later.humanize(), test_str)
+
+        test_str = "seconds ago"
+        earlier = arrow.Arrow.reverse_humanize(test_str)
+        self.assertEqual(earlier.humanize(), test_str)
+
+    def test_minutes(self):
+
+        test_str = "in 20 minutes"
+        later = arrow.Arrow.reverse_humanize(test_str)
+        self.assertEqual(later.humanize(), test_str)
+
+        test_str = "20 minutes ago"
+        earlier = arrow.Arrow.reverse_humanize(test_str)
+        self.assertEqual(earlier.humanize(), test_str)
+
+        test_str = "in a minute"
+        single_later = arrow.Arrow.reverse_humanize(test_str)
+        self.assertEqual(single_later.humanize(), test_str)
+
+        test_str = "a minute ago"
+        single_earlier = arrow.Arrow.reverse_humanize(test_str)
+        self.assertEqual(single_earlier.humanize(), test_str)
+
+    def test_hours(self):
+
+        test_str = "in 10 hours"
+        later = arrow.Arrow.reverse_humanize(test_str)
+        self.assertEqual(later.humanize(), test_str)
+
+        test_str = "10 hours ago"
+        earlier = arrow.Arrow.reverse_humanize(test_str)
+        self.assertEqual(earlier.humanize(), test_str)
+
+        test_str = "in an hour"
+        single_later = arrow.Arrow.reverse_humanize(test_str)
+        self.assertEqual(single_later.humanize(), test_str)
+
+        test_str = "an hour ago"
+        single_earlier = arrow.Arrow.reverse_humanize(test_str)
+        self.assertEqual(single_earlier.humanize(), test_str)
+
+    def test_day(self):
+
+        test_str = "in 10 days"
+        later = arrow.Arrow.reverse_humanize(test_str)
+        self.assertEqual(later.humanize(), test_str)
+
+        test_str = "10 days ago"
+        earlier = arrow.Arrow.reverse_humanize(test_str)
+        self.assertEqual(earlier.humanize(), test_str)
+
+        test_str = "in a day"
+        single_later = arrow.Arrow.reverse_humanize(test_str)
+        self.assertEqual(single_later.humanize(), test_str)
+
+        test_str = "a day ago"
+        single_earlier = arrow.Arrow.reverse_humanize(test_str)
+        self.assertEqual(single_earlier.humanize(), test_str)
+
+    def test_week(self):
+
+        test_str = "in 10 weeks"
+        later = arrow.Arrow.reverse_humanize(test_str)
+        self.assertEqual(later.humanize(), test_str)
+
+        test_str = "10 weeks ago"
+        earlier = arrow.Arrow.reverse_humanize(test_str)
+        self.assertEqual(earlier.humanize(), test_str)
+
+        test_str = "in a week"
+        single_later = arrow.Arrow.reverse_humanize(test_str)
+        self.assertEqual(single_later.humanize(), test_str)
+
+        test_str = "a week ago"
+        single_earlier = arrow.Arrow.reverse_humanize(test_str)
+        self.assertEqual(single_earlier.humanize(), test_str)
+
+    def test_month(self):
+
+        test_str = "in 10 months"
+        later = arrow.Arrow.reverse_humanize(test_str)
+        self.assertEqual(later.humanize(), test_str)
+
+        test_str = "10 months ago"
+        earlier = arrow.Arrow.reverse_humanize(test_str)
+        self.assertEqual(earlier.humanize(), test_str)
+
+        test_str = "in a month"
+        single_later = arrow.Arrow.reverse_humanize(test_str)
+        self.assertEqual(single_later.humanize(), test_str)
+
+        test_str = "a month ago"
+        single_earlier = arrow.Arrow.reverse_humanize(test_str)
+        self.assertEqual(single_earlier.humanize(), test_str)
+
+    def test_year(self):
+
+        test_str = "in 10 years"
+        later = arrow.Arrow.reverse_humanize(test_str)
+        self.assertEqual(later.humanize(), test_str)
+
+        test_str = "10 years ago"
+        earlier = arrow.Arrow.reverse_humanize(test_str)
+        self.assertEqual(earlier.humanize(), test_str)
+
+        test_str = "in a year"
+        single_later = arrow.Arrow.reverse_humanize(test_str)
+        self.assertEqual(single_later.humanize(), test_str)
+
+        test_str = "a year ago"
+        single_earlier = arrow.Arrow.reverse_humanize(test_str)
+        self.assertEqual(single_earlier.humanize(), test_str)
+
+
 class ArrowIsBetweenTests(Chai):
     def test_start_before_end(self):
         target = arrow.Arrow.fromdatetime(datetime(2013, 5, 7))

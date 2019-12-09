@@ -1414,6 +1414,87 @@ class Arrow(object):
                 return end, sys.maxsize
             return end, limit
 
+    @staticmethod
+    def reverse_humanize(human_string, locale="en_us"):
+        """ Constrcuts an Arrow object representing the date and time given by a human readable string
+
+        :param human_string: a ``str`` in human readable format to be coverted to an arrow object
+        :param locale: (optional) a ``str`` specifying a locale.  Defaults to 'en_us'.
+
+
+        Usage::
+
+            >>> arrow.Arrow.reverse_humanize('2 hours ago')
+            <Arrow [2019-12-08T16:00:54.397843+00:00]>
+
+        """
+        # Shortcut for 'just now' special case
+        if "now" in human_string:
+            return Arrow.now()
+
+        # Split the string on whitespace to analyze parts individually
+        human_list = human_string.split()
+
+        # Factor will later determine past or present
+        factor = None
+
+        # Determine past or future tense from presence of "ago" or "in" in the input string
+        if "ago" in human_string:
+            # Set -1 for past tense (will be multiplied with number later when passing to shift)
+            factor = -1
+
+            # in past tense formatting the number comes first
+            number_index = 0
+
+        elif "in" in human_string:
+            # Set 1 for future tense (will be multiplied with number later when passing to shift)
+            factor = 1
+
+            # in future tense formatting the number comes second
+            number_index = 1
+
+        # If we didn't find "in" or "ago" in the input string then we cannot determine past or present
+        if factor is None:
+            raise ValueError(
+                "one of 'ago' or 'in' is required to determine past or future time"
+            )
+
+        # Determine number in input string
+        if human_list[number_index] == "a" or human_list[number_index] == "an":
+            # Special case for 1
+            number = 1
+        else:
+            # Otherwise try to convert string to number
+            try:
+                number = int(human_list[number_index])
+            except ValueError:
+                raise ValueError(
+                    "Error parsing the number from the human readable string"
+                )
+
+        # Defines a list of acceptable time periods
+        # Only used for searching the input string so we only need singular versions
+        # We will later add an 's' if it is singular to comply with the call to shift()
+        acceptable_inputs = ["second", "minute", "hour", "day", "week", "month", "year"]
+
+        # Search the input string for any of the acceptable time periods
+        for possible_input in acceptable_inputs:
+            # Gets the index in the input string of the beginning of a possible input if it exists, -1 otherwise
+            index = human_string.find(possible_input)
+
+            if index > 0:
+                # If we find an accveptable time period in the input string, check if it's plural in the input
+                # If it's singular add an 's' to the end so we can properly call shift()
+                if (
+                    index + len(possible_input) < len(human_string)
+                    and index + len(possible_input) != "s"
+                ):
+                    possible_input += "s"
+
+                # Get the current time, shift it based on the input string
+                # This dictionary syntax is used so we can use the value of possible_input as the kwarg keyword
+                return Arrow.now().shift(**{possible_input: factor * number})
+
 
 Arrow.min = Arrow.fromdatetime(datetime.min)
 Arrow.max = Arrow.fromdatetime(datetime.max)
